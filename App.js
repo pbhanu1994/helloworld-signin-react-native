@@ -31,7 +31,7 @@ export default class PizzaTranslator extends Component<Props> {
         <Text style={styles.instructions}>Prakash</Text>
         <Text style={styles.instructions}>{instructions}</Text> */}
 
-        <Text style={styles.temp}>Hello World!/Text>
+        <Text style={styles.temp}>Hello World!</Text>
         <TextInput style={{ justifyContent: 'center', alignItems: 'center', fontSize:30, height: 60, width: 260 }} placeholder={'Username'}/>
         <TextInput secureTextEntry={true} style={{ justifyContent: 'center', alignItems: 'center',fontSize:30, height: 60, width: 260 }} placeholder={'Password'}/>
         <Button onPress={this._onPressButton} style={styles.sign_in} title="Sign In" color="#841584"/>
