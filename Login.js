@@ -11,23 +11,17 @@ import {
 
 import { Firebase } from './Firebase';
 
-export default class Registration extends Component {
+export default class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
             email: '',
             password: '',
         }
     }
 
     updateValue(text, field) {
-        if (field == 'name' && field != "") {
-            this.setState({
-                name: text,
-            })
-        }
-        else if (field == 'email' && field != "") {
+        if (field == 'email' && field != "") {
             this.setState({
                 email: text,
             })
@@ -45,43 +39,41 @@ export default class Registration extends Component {
     }
 
     showToConsole = () => {
-        if (this.state.name == "") {
-            Alert.alert("Please input the Name field")
-        }
-        else if (this.state.email == "") {
-            Alert.alert("Please input the Email field")
+        if (this.state.email == "") {
+            alert("Please input the Email field")
         }
         else if (this.state.password == "") {
-            Alert.alert("Please input the Password field")
+            alert("Please input the Password field")
         }
         //Passing the values to the regInfo object in Firebase.js:
         Firebase.regInfo.name = this.state.name,
-        Firebase.regInfo.email = this.state.email,
-        Firebase.regInfo.password = this.state.password,
+            Firebase.regInfo.email = this.state.email,
+            Firebase.regInfo.password = this.state.password,
 
-        //Creating User with email and password:
-        Firebase.auth.createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
-            //Handling errors:
-            var errorCode = error.code;
-            var errorMessage = error.Message;
+            //Creating User with email and password:
+            Firebase.auth.signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
+                //Handling errors:
+                var errorCode = error.code;
+                var errorMessage = error.Message;
 
-            if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
-            }
-            console.log(error);
-        });
+                if (errorCode == 'auth/weak-password') {
+                    Alert.alert('The password is too weak.');
+                } else {
+                    Alert.alert(errorMessage);
+                }
+                console.log(error);
+            });
     }
 
     render() {
         return (
             <View style={styles.registrationForm}>
-                <Text style={styles.header}>Registration Form</Text>
+                <Text style={styles.header}>Login</Text>
 
-                <TextInput style={styles.textinput} placeholder="Your Name" onChangeText={(text) => this.updateValue(text, 'name')} value={this.state.name}></TextInput>
                 <TextInput style={styles.textinput} placeholder="Your Email" onChangeText={(text) => this.updateValue(text, 'email')} value={this.state.email}></TextInput>
                 <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Your Passwsord" onChangeText={(text) => this.updateValue(text, 'password')} value={this.state.password}></TextInput>
                 <TouchableOpacity style={styles.button} onPress={this.showToConsole}>
-                    <Text style={styles.btntext}>Sign Up</Text>
+                    <Text style={styles.btntext}>Login</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -122,4 +114,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export { Registration };
+export { Login };

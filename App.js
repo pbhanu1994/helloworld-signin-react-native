@@ -6,19 +6,14 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Alert, Platform, StyleSheet, Text, Button, TextInput, View} from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, Alert, Platform, StyleSheet, Text, Button, TextInput, View } from 'react-native';
 
-import {Registration} from './Registration';
-import {Firebase} from './Firebase';
+import { Registration } from './Registration';
+import { Login } from './Login';
 
 
 export default class PizzaTranslator extends Component {
-
-//Configurating firebase with api Key and authDomain:
-  componentWillMount(){
-    Firebase.init();
-  }
 
   _onPressButton() {
     Alert.alert('You tapped the button!')
@@ -28,10 +23,7 @@ export default class PizzaTranslator extends Component {
       <View style={styles.container}>
 
         <Registration />
-        {/* <Text style={styles.temp}>Hello World!</Text>
-        <TextInput style={{ justifyContent: 'center', alignItems: 'center', fontSize:30, height: 60, width: 260 }} placeholder={'Username'}/>
-        <TextInput secureTextEntry={true} style={{ justifyContent: 'center', alignItems: 'center',fontSize:30, height: 60, width: 260 }} placeholder={'Password'}/>
-        <Button onPress={this._onPressButton} style={styles.sign_in} title="Sign In" color="#841584"/> */}
+        {/* <Login /> */}
       </View>
     );
   }
@@ -57,7 +49,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   temp: {
-    paddingTop:50,
+    paddingTop: 50,
     textAlign: 'center',
     color: 'grey',
     fontWeight: 'bold',
@@ -68,4 +60,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     fontWeight: 'bold'
   }
-}); 
+});
+
+AppRegistry.registerComponent('PizzaTranslator', () => PizzaTranslator)
