@@ -10,20 +10,14 @@ import React, {Component} from 'react';
 import {Alert, Platform, StyleSheet, Text, Button, TextInput, View} from 'react-native';
 
 import {Registration} from './Registration';
+import {Firebase} from './Firebase';
 
-//Importing firebase
-import * as firebase from 'firebase';
 
 export default class PizzaTranslator extends Component {
 
 //Configurating firebase with api Key and authDomain:
   componentWillMount(){
-    const firebaseConfig = {
-      apiKey: 'AIzaSyB_3y8kZiW2KzYKlhX0KMHHCOjLToUZ6E4',
-      authDomain: 'reactivenativedemo.firebaseapp.com',
-
-    }
-    firebase.initializeApp(firebaseConfig);
+    Firebase.init();
   }
 
   _onPressButton() {
