@@ -45,22 +45,6 @@ export default class Registration extends Component {
         Firebase.init();
     }
 
-    showToConsole = () => {
-        if (this.state.name == "") {
-            Alert.alert("OOPS!","Please input the Name field")
-        }
-        else if (this.state.email == "") {
-            Alert.alert("OOPS!","Please input the Email field")
-        }
-        else if (this.state.password == "") {
-            Alert.alert("OOPS!","Please input the Password field")
-        }
-        //Passing the values to the regInfo object in Firebase.js:
-        Firebase.regInfo.name = this.state.name,
-        Firebase.regInfo.email = this.state.email,
-        Firebase.regInfo.password = this.state.password
-    }
-
     //Sign UP an User:
     signUp = () => {
         if (this.state.name == "") {
@@ -96,16 +80,17 @@ export default class Registration extends Component {
         }
 
         //Creating User with email and password:
-        Firebase.auth.signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
-            //Handling errors:
+        Firebase.auth.signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+            // Handle Errors here.
             var errorCode = error.code;
-            var errorMessage = error.Message;
-
-            if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
+            var errorMessage = error.message;
+            if(errorCode || errorMessage){
+                Alert.alert("Incorrect Email or Password")
             }
-            console.log(error);
-        });
+            if(!errorCode && !errorMessage){
+                Alert.alert("Login Successful!");
+            }
+          });
     }
 
     render() {
