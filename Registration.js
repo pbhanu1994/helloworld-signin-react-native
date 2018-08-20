@@ -9,17 +9,21 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import { Firebase } from './Firebase';
+import firebase from './Firebase';
 
 export default class Registration extends Component {
+
+    static navigationOptions = {
+        title: 'Home',
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             email: '',
             password: '',
+            isLoading: false
         };
-        this.signUp = this.signUp.bind(this);
-        this.signIn = this.signIn.bind(this);
     }
 
     // handleInput(text, field) {
@@ -42,36 +46,13 @@ export default class Registration extends Component {
 
     componentWillMount() {
         //Configurating firebase with api Key, authDomain, DB Name, etc:
-        Firebase.init();
+        // Firebase.init();
     }
 
     //Sign UP an User:
     signUp = () => {
-        if (this.state.name == "") {
-            Alert.alert("OOPS!","Please input the Name field")
-        }
-        else if (this.state.email == "") {
-            Alert.alert("OOPS!","Please input the Email field")
-        }
-        else if (this.state.password == "") {
-            Alert.alert("OOPS!","Please input the Password field")
-        }
+        this.setState({isLoading: true});
 
-        //Creating User with email and password:
-        Firebase.auth.createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
-            //Handling errors:
-            var errorCode = error.code;
-            var errorMessage = error.Message;
-
-            if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
-            }
-            console.log(error);
-        });
-    }
-
-    //Sign IN an User:
-    signIn = () => {
         if (this.state.email == "") {
             Alert.alert("OOPS!","Please input the Email field")
         }
@@ -80,15 +61,48 @@ export default class Registration extends Component {
         }
 
         //Creating User with email and password:
-        Firebase.auth.signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+        firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then((result) => {
+            Alert.alert("Successfully created the account");
+            this.props.navigation.navigate('Welcome', {password: this.state.password})
+        }).catch(function (error) {
+            //Handling errors:
+            var errorCode = error.code;
+            var errorMessage = error.Message;
+
+            if (errorCode || errorMessage) {
+                console.log(error);
+                Alert.alert("Failed to create an Account");
+            }
+        }).finally(() => {
+            this.setState({isLoading: false});
+        });
+    }
+
+    //Sign IN an User:
+    signIn = () => {
+        this.setState({isLoading: true});
+
+        if (this.state.email == "") {
+            Alert.alert("OOPS!","Please input the Email field")
+        }
+        else if (this.state.password == "") {
+            Alert.alert("OOPS!","Please input the Password field")
+        }
+
+        //Creating User with email and password:
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then((result) => {
+            //Alert.alert("Successfully Signed In!");
+            this.props.navigation.navigate('Welcome', {password: this.state.password})
+        })
+        .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
+
             if(errorCode || errorMessage){
                 Alert.alert("Incorrect Email or Password")
-            }
-            if(!errorCode && !errorMessage){
-                Alert.alert("Login Successful!");
             }
           });
     }
@@ -97,16 +111,16 @@ export default class Registration extends Component {
         return (
             <View style={styles.registrationForm}>
                 <Text style={styles.header}>Register User</Text>
-                <TextInput style={styles.textinput} placeholder="Your Email" placeholderTextColor="#fff" onChangeText={(text) => this.setState({email: text})} defaultValue={this.state.email}></TextInput>
-                <TextInput style={styles.textinput} secureTextEntry={true} placeholder="Your Passwsord" placeholderTextColor="#fff" onChangeText={(text) => this.setState({password: text})} defaultValue={this.state.password}></TextInput>
-                <TouchableOpacity style={styles.button} onPress={this.signUp}>
+                <TextInput style={styles.textinput}  textContentType="emailAddress" keyboardType="email-address" placeholder="Your Email" placeholderTextColor="#fff" onChangeText={email => this.setState({ email })} defaultValue={this.state.email}></TextInput>
+                <TextInput style={styles.textinput} textContentType="password" secureTextEntry={true} placeholder="Your Passwsord" placeholderTextColor="#fff" onChangeText={password => this.setState({ password })} defaultValue={this.state.password}></TextInput>
+                <TouchableOpacity style={styles.button} onPress={this.signUp.bind(this)}>
                     <Text style={styles.btntext}>Sign Up</Text>
                 </TouchableOpacity>
                 <Text style={styles.divideText}> OR 
                     
                 </Text>
                 <Text style={{color: 'cyan',textAlign:'center', paddingTop:5, fontWeight:'bold'}}
-                    onPress={this.signIn}>
+                    onPress={this.signIn.bind(this)}>
                         Sign In
                 </Text>
             </View>
@@ -116,6 +130,7 @@ export default class Registration extends Component {
 
 //CSS:
 const styles = StyleSheet.create({
+    
     registrationForm: {
         alignSelf: 'stretch',
     },

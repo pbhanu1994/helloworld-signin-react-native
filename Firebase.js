@@ -10,19 +10,4 @@ const config = {
     messagingSenderId: "675336683507"
 };
 
-export default class Firebase {
-    static auth;
-
-    //Object for details to store:
-    static regInfo = {
-        name: '',
-        email: '',
-        password: ''
-    }
-    static init() {
-        firebase.initializeApp(config);
-        Firebase.auth = firebase.auth();
-    }
-}
-
-export { Firebase };
+export default firebase.initializeApp(config);
