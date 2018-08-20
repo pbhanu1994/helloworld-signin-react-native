@@ -24,9 +24,7 @@ export default class Welcome extends Component {
         const pass = navigation.getParam('password', '');
         return(
             <View style={styles.container}>
-                <Text>Email: {firebaseUser.email}</Text>
-                <Text>UID: {firebaseUser.uid}</Text>
-                <Text>You password is {pass}</Text>
+                <Text style={styles.details}>Welcome! Your Email is: {firebaseUser.email}</Text>
             </View>
         );
     }
@@ -40,6 +38,9 @@ const styles = StyleSheet.create({
       backgroundColor: '#36485F',
       paddingLeft: 60,
       paddingRight: 60,
+    },
+    details: {
+        color: '#fff'
     }
 });
 
